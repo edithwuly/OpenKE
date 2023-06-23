@@ -1,6 +1,6 @@
 import openke
 from openke.config import Trainer, Tester, Predictor
-from openke.module.model import TransH
+from openke.module.model import TransD
 from openke.module.loss import MarginLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
@@ -20,25 +20,26 @@ train_dataloader = TrainDataLoader(
 test_dataloader = TestDataLoader("./benchmarks/NKX/", "link")
 
 # define the model
-transh = TransH(
+transd = TransD(
 	ent_tot = train_dataloader.get_ent_tot(),
 	rel_tot = train_dataloader.get_rel_tot(),
-	dim = 200,
+	dim_e = 200,
+	dim_r = 200,
 	p_norm = 1,
 	norm_flag = True)
 
+
 # define the loss function
 model = NegativeSampling(
-	model = transh,
+	model = transd,
 	loss = MarginLoss(margin = 4.0),
 	batch_size = train_dataloader.get_batch_size()
 )
 
-
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 1000, alpha = 1.0, use_gpu = True)
 trainer.run()
-transh.save_checkpoint('./checkpoint/transh_nkx.ckpt')
+transd.save_checkpoint('./checkpoint/transd_nkx.ckpt')
 
 # test the model
 # transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
@@ -46,10 +47,10 @@ transh.save_checkpoint('./checkpoint/transh_nkx.ckpt')
 # tester.run_link_prediction(type_constrain = False)
 
 # predict
-transh.load_checkpoint('./checkpoint/transh_nkx.ckpt')
-predictor = Predictor(model = transh, data_loader = test_dataloader, use_gpu = True)
+transd.load_checkpoint('./checkpoint/transd_nkx.ckpt')
+predictor = Predictor(model = transd, data_loader = test_dataloader, use_gpu = True)
 links = predictor.run_link_prediction(type_constrain = False)
-fout = open("nkx_transh_prediction.txt", "w", encoding="utf-8")
+fout = open("nkx_transd_prediction.txt", "w", encoding="utf-8")
 entity2id = open("./benchmarks/NKX/entity2id.txt", encoding="utf-8")
 entityId = {}
 for line in entity2id.readlines():
