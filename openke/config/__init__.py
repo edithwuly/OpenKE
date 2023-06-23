@@ -4,8 +4,10 @@ from __future__ import print_function
 
 from .Trainer import Trainer
 from .Tester import Tester
+from .Predictor import Predictor
 
 __all__ = [
 	'Trainer',
-	'Tester'
+	'Tester',
+	'Predictor'
 ]
