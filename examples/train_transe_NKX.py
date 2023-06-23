@@ -17,7 +17,7 @@ train_dataloader = TrainDataLoader(
 	neg_rel = 0)
 
 # dataloader for test
-test_dataloader = TestDataLoader("./benchmarks/NKX/", "link")
+# test_dataloader = TestDataLoader("./benchmarks/NKX/", "link")
 
 # define the model
 transe = TransE(
