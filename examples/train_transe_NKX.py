@@ -66,7 +66,6 @@ for line in relation2id.readlines():
 		continue
 	relationId[line[1]] = line[0]
 relation2id.close()
-fout.write(str(len(links)) + "\n")
 for link in links:
 	link = link.split(" ")
 	if len(link) != 3:
