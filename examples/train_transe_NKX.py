@@ -1,5 +1,5 @@
 import openke
-from openke.config import Trainer, Tester
+from openke.config import Trainer, Tester, Predictor
 from openke.module.model import TransE
 from openke.module.loss import MarginLoss
 from openke.module.strategy import NegativeSampling
@@ -17,7 +17,7 @@ train_dataloader = TrainDataLoader(
 	neg_rel = 0)
 
 # dataloader for test
-# test_dataloader = TestDataLoader("./benchmarks/NKX/", "link")
+test_dataloader = TestDataLoader("./benchmarks/NKX/", "link")
 
 # define the model
 transe = TransE(
@@ -44,3 +44,10 @@ transe.save_checkpoint('./checkpoint/transe_nkx.ckpt')
 # transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
 # tester = Tester(model = transe, data_loader = test_dataloader, use_gpu = True)
 # tester.run_link_prediction(type_constrain = False)
+
+# predict
+fout = open("nkx_prediction.txt", "w", encoding="utf-8")
+transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
+predictor = Predictor(model = transe, data_loader = test_dataloader, use_gpu = True)
+predictor.run_link_prediction(type_constrain = False, save_file = fout)
+fout.close()
