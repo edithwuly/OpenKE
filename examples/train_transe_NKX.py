@@ -69,6 +69,8 @@ relation2id.close()
 fout.write(str(len(links)) + "\n")
 for link in links:
 	link = link.split(" ")
+	if len(link) != 3:
+		continue
 	head = entityId[link[0]]
 	tail = entityId[link[1]]
 	relation = relationId[link[2]]
