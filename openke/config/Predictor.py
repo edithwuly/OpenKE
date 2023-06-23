@@ -76,19 +76,23 @@ class Predictor(object):
             type_constrain = 0
         training_range = tqdm(self.data_loader)
         for index, [data_head, data_tail] in enumerate(training_range):
+            links = []
             score = self.test_one_step(data_head)
             # print(score)
             for i in range(len(score)):
                 if score[i] >= 20.0:
-                    print(str(data_head['batch_h'][i]) + "," + str(data_head['batch_t'][0]) +
-                          "," + str(data_head['batch_r'][0]))
+                    link = str(data_head['batch_h'][i]) + "," + str(data_head['batch_t'][0]) + "," + str(data_head['batch_r'][0])
+                    if link not in links:
+                        links.append(link)
             self.lib.testHead(score.__array_interface__["data"][0], index, type_constrain)
             score = self.test_one_step(data_tail)
             # print(score)
             for i in range(len(score)):
                 if score[i] >= 20.0:
-                    print(str(data_tail['batch_h'][0]) + "," + str(data_tail['batch_t'][i]) +
-                          "," + str(data_tail['batch_r'][0]))
+                    link = str(data_tail['batch_h'][0]) + "," + str(data_tail['batch_t'][i]) + "," + str(data_tail['batch_r'][0])
+                    if link not in links:
+                        links.append(link)
+            print(len(links))
             self.lib.testTail(score.__array_interface__["data"][0], index, type_constrain)
         self.lib.test_link_prediction(type_constrain)
 
