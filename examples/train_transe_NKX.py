@@ -50,7 +50,27 @@ transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
 predictor = Predictor(model = transe, data_loader = test_dataloader, use_gpu = True)
 links = predictor.run_link_prediction(type_constrain = False)
 fout = open("nkx_transe_prediction.txt", "w", encoding="utf-8")
+entity2id = open("./benchmarks/NKX/entity2id.txt", encoding="utf-8")
+entityId = {}
+for line in entity2id.readlines():
+	line = line.split("\t")
+	if len(line) != 2:
+		continue
+	entityId[line[1]] = line[0]
+entity2id.close()
+relation2id = open("./benchmarks/NKX/relation2id.txt", encoding="utf-8")
+relationId = {}
+for line in relation2id.readlines():
+	line = line.split("\t")
+	if len(line) != 2:
+		continue
+	relationId[line[1]] = line[0]
+relation2id.close()
 fout.write(str(len(links)) + "\n")
 for link in links:
-	fout.write(link + "\n")
+	link = link.split(" ")
+	head = entityId[link[0]]
+	tail = entityId[link[1]]
+	relation = relationId[link[2]]
+	fout.write(head + "," + relation + "," + tail + "\n")
 fout.close()
