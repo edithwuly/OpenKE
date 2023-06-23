@@ -77,10 +77,16 @@ class Predictor(object):
         training_range = tqdm(self.data_loader)
         for index, [data_head, data_tail] in enumerate(training_range):
             score = self.test_one_step(data_head)
-            print(score)
+            # print(score)
+            for i in range(len(score)):
+                if score[i] >= 20.0:
+                    print(data_head['batch_h'] + "," + data_head['batch_t'] + "," + data_head['batch_r'])
             self.lib.testHead(score.__array_interface__["data"][0], index, type_constrain)
             score = self.test_one_step(data_tail)
-            print(score)
+            # print(score)
+            for i in range(len(score)):
+                if score[i] >= 20.0:
+                    print(data_tail['batch_h'] + "," + data_tail['batch_t'] + "," + data_tail['batch_r'])
             self.lib.testTail(score.__array_interface__["data"][0], index, type_constrain)
         self.lib.test_link_prediction(type_constrain)
 
