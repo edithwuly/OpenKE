@@ -7,7 +7,7 @@ from openke.data import TrainDataLoader, TestDataLoader
 
 # dataloader for training
 train_dataloader = TrainDataLoader(
-	in_path = "./benchmarks/NKX/",
+	in_path = "./benchmarks/ZDX/",
 	nbatches = 100,
 	threads = 8,
 	sampling_mode = "normal",
@@ -17,7 +17,7 @@ train_dataloader = TrainDataLoader(
 	neg_rel = 0)
 
 # dataloader for test
-test_dataloader = TestDataLoader("./benchmarks/NKX/", "link")
+test_dataloader = TestDataLoader("./benchmarks/ZDX/", "link")
 
 # define the model
 transe = TransE(
@@ -38,7 +38,7 @@ model = NegativeSampling(
 # train the model
 trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 1000, alpha = 1.0, use_gpu = True)
 trainer.run()
-transe.save_checkpoint('./checkpoint/transe_nkx.ckpt')
+transe.save_checkpoint('./checkpoint/transe_zdx.ckpt')
 
 # test the model
 # transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
@@ -46,10 +46,10 @@ transe.save_checkpoint('./checkpoint/transe_nkx.ckpt')
 # tester.run_link_prediction(type_constrain = False)
 
 # predict
-transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
+transe.load_checkpoint('./checkpoint/transe_zdx.ckpt')
 predictor = Predictor(model = transe, data_loader = test_dataloader, use_gpu = True)
 links = predictor.run_link_prediction(type_constrain = False)
-fout = open("nkx_transe_prediction.txt", "w", encoding="utf-8")
+fout = open("zdx_transe_prediction.txt", "w", encoding="utf-8")
 fout.write(str(len(links)) + "\n")
 for link in links:
 	fout.write(link + "\n")
