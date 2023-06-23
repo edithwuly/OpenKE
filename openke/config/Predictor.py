@@ -75,8 +75,8 @@ class Predictor(object):
         else:
             type_constrain = 0
         training_range = tqdm(self.data_loader)
+        links = []
         for index, [data_head, data_tail] in enumerate(training_range):
-            links = []
             score = self.test_one_step(data_head)
             # print(score)
             for i in range(len(score)):
@@ -92,8 +92,8 @@ class Predictor(object):
                     link = str(data_tail['batch_h'][0]) + "," + str(data_tail['batch_t'][i]) + "," + str(data_tail['batch_r'][0])
                     if link not in links:
                         links.append(link)
-            print(len(links))
             self.lib.testTail(score.__array_interface__["data"][0], index, type_constrain)
+        print(len(links))
         self.lib.test_link_prediction(type_constrain)
 
         mrr = self.lib.getTestLinkMRR(type_constrain)
