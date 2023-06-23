@@ -89,7 +89,7 @@ class Predictor(object):
             # print(score)
             for i in range(len(score)):
                 if score[i] >= 21.5:
-                    link = str(data_tail['batch_h'][0]) + "," + str(data_tail['batch_t'][i]) + "," + str(data_tail['batch_r'][0])
+                    link = str(data_tail['batch_h'][0]) + " " + str(data_tail['batch_t'][i]) + " " + str(data_tail['batch_r'][0])
                     if link not in links:
                         links.append(link)
             self.lib.testTail(score.__array_interface__["data"][0], index, type_constrain)
