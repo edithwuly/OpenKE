@@ -46,8 +46,11 @@ model = NegativeSampling(
 # tester.run_link_prediction(type_constrain = False)
 
 # predict
-fout = open("nkx_prediction.txt", "w", encoding="utf-8")
 transe.load_checkpoint('./checkpoint/transe_nkx.ckpt')
 predictor = Predictor(model = transe, data_loader = test_dataloader, use_gpu = True)
-predictor.run_link_prediction(type_constrain = False, save_file = fout)
+links = predictor.run_link_prediction(type_constrain = False)
+fout = open("nkx_prediction.txt", "w", encoding="utf-8")
+fout.write(str(len(links)) + "\n")
+for link in links:
+	fout.write(link + "\n")
 fout.close()

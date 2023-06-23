@@ -67,7 +67,7 @@ class Predictor(object):
             'mode': data['mode']
         })
 
-    def run_link_prediction(self, type_constrain = False, save_file = None):
+    def run_link_prediction(self, type_constrain = False):
         self.lib.initTest()
         self.data_loader.set_sampling_mode('link')
         if type_constrain:
@@ -81,7 +81,7 @@ class Predictor(object):
             # print(score)
             for i in range(len(score)):
                 if score[i] >= 21.5:
-                    link = str(data_head['batch_h'][i]) + "," + str(data_head['batch_t'][0]) + "," + str(data_head['batch_r'][0])
+                    link = str(data_head['batch_h'][i]) + " " + str(data_head['batch_t'][0]) + " " + str(data_head['batch_r'][0])
                     if link not in links:
                         links.append(link)
             self.lib.testHead(score.__array_interface__["data"][0], index, type_constrain)
@@ -94,15 +94,16 @@ class Predictor(object):
                         links.append(link)
             self.lib.testTail(score.__array_interface__["data"][0], index, type_constrain)
         print(len(links))
-        self.lib.test_link_prediction(type_constrain)
-
-        mrr = self.lib.getTestLinkMRR(type_constrain)
-        mr = self.lib.getTestLinkMR(type_constrain)
-        hit10 = self.lib.getTestLinkHit10(type_constrain)
-        hit3 = self.lib.getTestLinkHit3(type_constrain)
-        hit1 = self.lib.getTestLinkHit1(type_constrain)
-        print (hit10)
-        return mrr, mr, hit10, hit3, hit1
+        return links
+        # self.lib.test_link_prediction(type_constrain)
+        #
+        # mrr = self.lib.getTestLinkMRR(type_constrain)
+        # mr = self.lib.getTestLinkMR(type_constrain)
+        # hit10 = self.lib.getTestLinkHit10(type_constrain)
+        # hit3 = self.lib.getTestLinkHit3(type_constrain)
+        # hit1 = self.lib.getTestLinkHit1(type_constrain)
+        # print (hit10)
+        # return mrr, mr, hit10, hit3, hit1
 
     def get_best_threshlod(self, score, ans):
         res = np.concatenate([ans.reshape(-1,1), score.reshape(-1,1)], axis = -1)
