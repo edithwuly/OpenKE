@@ -80,7 +80,7 @@ class Predictor(object):
             score = self.test_one_step(data_head)
             # print(score)
             for i in range(len(score)):
-                if score[i] >= 21.0:
+                if score[i] >= 21.5:
                     link = str(data_head['batch_h'][i]) + "," + str(data_head['batch_t'][0]) + "," + str(data_head['batch_r'][0])
                     if link not in links:
                         links.append(link)
@@ -88,7 +88,7 @@ class Predictor(object):
             score = self.test_one_step(data_tail)
             # print(score)
             for i in range(len(score)):
-                if score[i] >= 21.0:
+                if score[i] >= 21.5:
                     link = str(data_tail['batch_h'][0]) + "," + str(data_tail['batch_t'][i]) + "," + str(data_tail['batch_r'][0])
                     if link not in links:
                         links.append(link)
